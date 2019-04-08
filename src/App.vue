@@ -3,9 +3,9 @@
     <startSettings v-on:start="start($event)" v-if="!started"></startSettings>
     <div id="game" v-if="started">
       <div id="card-container">
-        <card v-for="n in this.numberOfCards" v-bind:key="'card-' + n" :value="cardsForPlay[n-1]"></card>
+        <card v-for="(item, i) in this.cardsForPlay" v-bind:key="'card-' + i" :value="item" ref="cards"></card>
       </div>
-      <players ref="playerContainer" :playerNames="['Player1', 'Player2']" :activePlayerIndex="activePlayerIndex"></players>
+      <players ref="playerContainer" :playerNames="playerNames" :activePlayerIndex="activePlayerIndex" :isFinished="isFinished" @restart="reset"></players>
     </div>
   </div>
 </template>
@@ -15,6 +15,7 @@
 
 import Card from './components/Card.vue';
 import Player from './components/Player.vue';
+import Pictures from './players.json';
 import PlayerContainer from './components/PlayerContainer.vue';
 import StartSettings from './components/StartSettings.vue';
 import _ from "lodash";
@@ -24,22 +25,24 @@ export default {
   name: 'app',
   data: function(){
     return {
-      commaSeparatedCards: "",
-      waitingForSecondCard: false,
       flippedCards: [],
-      singleCards: [],
       cardsForPlay: [],
       playerNames: ["Player1", "Player2"],
       activePlayerIndex: 0,
-      started: false
+      started: false,
+      startSettings: null,
+      isFinished: false
     }
   },
   props: {
     someProp: String
   },
   computed: {
-    numberOfCards: function(){
-      return this.cardsForPlay.length;
+    cards: function(){
+      return this.$refs.cards
+    },
+    removedCards: function(){
+      return this.cards.filter(c => c.isRemovedFromPlay);
     },
     firstCard: function(){
       return this.flippedCards[0] || null;
@@ -61,7 +64,8 @@ export default {
   },
   methods: {
     prepareCards: function(){
-      let cards = this.singleCards.concat(this.singleCards);
+      let singleCards = _.take(_.shuffle(Pictures), Math.min(this.startSettings.numberOfCards / 2, Pictures.length));
+      let cards = singleCards.concat(singleCards);
       return _.shuffle(cards);
     },
     addCard: function(card){
@@ -83,6 +87,7 @@ export default {
           that.secondCard.removeFromPlay();
           that.flippedCards = [];
           that.$refs.playerContainer.incrementScoreOfActivePlayer();
+          that.checkForFinish();
         }
         else{
           console.log("No match...");
@@ -93,19 +98,43 @@ export default {
       }, 1000);
         
     },
-    start: function(cards){
-      this.singleCards = cards;
+    start: function(startSettings){
+      if(this.startSettings === null && startSettings != undefined) {
+        this.startSettings = startSettings;
+      }
+      this.playerNames = this.startSettings.players;
       this.cardsForPlay = this.prepareCards();
       this.started = true;
-    }
+    },
+    checkForFinish: function(){
+      if(this.removedCards.length === this.cardsForPlay.length){
+        this.isFinished = true;
+      }
+    },
+    reset(){
+      this.isFinished = false;
+      this.cards.forEach(c => {
+        c.reset();
+      });
+      this.start();
+      }
   }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   div#card-container {
     display: flex;
+    flex: 7;
     flex-wrap: wrap;
-    border: solid 2px purple;
+    height: 100%;
+  }
+
+  div#player-container{
+    flex: 1;
+  }
+
+  div#game{
+    display: flex;
   }
 </style>

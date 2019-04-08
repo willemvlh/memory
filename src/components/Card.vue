@@ -1,6 +1,5 @@
 <template>
-    <div class="card" :class="{isTurned: isTurned, removed: isRemovedFromPlay}" @click="flip()">
-        <span class="value" :style="{display: display }">{{value}}</span>
+    <div class="card" :class="{isTurned: isTurned, removed: isRemovedFromPlay}" :style="{backgroundImage: isTurned ? 'url(./football/' + value + ')' : ''}" @click="flip()">
     </div>
 </template>
 
@@ -37,17 +36,29 @@ export default {
         },
         removeFromPlay: function(){
             this.isRemovedFromPlay = true;
+        },
+        reset(){
+            this.isRemovedFromPlay = false;
+            this.isTurned = false;
         }
+    },
+    mounted: function(){
+        this.isTurned = false;
+        this.isRemovedFromPlay = false;
     }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 div.card{
-    width: 150px;
-    height: 200px;
-    border: solid 1px grey;
+    flex: 0 0 120px;
+    height: 160px;
+    border: $border;
     margin: 10px;
+    background-size: cover;
+    background-position: center;
+    background-image: url("../assets/card.jpg");
+    box-shadow: $box-shadow;
     &:hover{
         cursor: pointer;
     }
@@ -55,9 +66,5 @@ div.card{
 
 div.removed{
     visibility: hidden!important;
-}
-
-div.isTurned{
-    background-color: rgba(255,0,0,0.6);
 }
 </style>
