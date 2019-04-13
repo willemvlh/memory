@@ -1,5 +1,13 @@
 <template>
-    <div class="card" :class="{isTurned: isTurned, removed: isRemovedFromPlay}" :style="{backgroundImage: isTurned ? 'url(./football/' + value + ')' : ''}" @click="flip()">
+    <div class="card" :class="{isTurned: isTurned, removed: isRemovedFromPlay}" :style="{width: widthPx, height: heightPx}" @click="flip()">
+        <div class="card-inner">
+            <div class="card-front">
+                <img class="card-image" src='../assets/card.jpg' :style="{width: widthPx, height: heightPx}"/>
+            </div>
+            <div class="card-back">
+                <img class="card-image" :src="'./football/' + value" :style="{width: widthPx, height: heightPx}"/>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -8,7 +16,8 @@ export default {
     name: "card",
     props: {
         color: String,
-        value: String
+        value: String,
+        totalCards: Number
     },
     data: function(){
         return {
@@ -17,9 +26,23 @@ export default {
         }
     },
     computed: {
-        display: function(){
-            return this.isTurned ? "block" : "none"
+        height: function(){
+            if(!this.totalCards){
+                return 140;
+            }
+            let calculated = 160 - (this.totalCards * 1.3);
+            return Math.max(calculated, 100);
+        },
+        width: function(){
+            return this.height / 1.4;
+        },
+        widthPx: function(){
+            return this.width + "px";
+        },
+        heightPx: function(){
+            return this.height + "px";
         }
+
     },
     methods: {
         flip: function(){
@@ -28,10 +51,7 @@ export default {
             }
             this.isTurned = !this.isTurned;
             if(this.isTurned){
-                this.$parent.addCard(this);
-            }
-            else{
-                this.$parent.removeCard(this);
+                this.$emit("cardFlip");
             }
         },
         removeFromPlay: function(){
@@ -45,26 +65,57 @@ export default {
     mounted: function(){
         this.isTurned = false;
         this.isRemovedFromPlay = false;
+        this.$emit("cardCreated", this);
     }
 }
 </script>
 
 <style lang="scss" scoped>
+
 div.card{
-    flex: 0 0 120px;
-    height: 160px;
-    border: $border;
     margin: 10px;
-    background-size: cover;
-    background-position: center;
-    background-image: url("../assets/card.jpg");
-    box-shadow: $box-shadow;
+    transition: opacity 0.5s;
     &:hover{
         cursor: pointer;
     }
 }
 
+.card-inner{
+    position: relative;
+    transform-style: preserve-3d;
+    transition: all 0.3s ease-in-out;
+}
+
+.isTurned .card-back .card-image, .card-front .card-image{
+    box-shadow: $box-shadow;
+    border: solid 1px #aaa;
+}
+
+.isTurned .card-front .card-image{
+    box-shadow: none;
+    border: none;
+}
+
+.isTurned .card-inner{
+    transform: rotateY(180deg);
+}
+
+.card-front, .card-back{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+}
+
+.card-back{
+    transform: rotateY(180deg);     
+}
+
+img{
+    object-fit: cover;
+}
+
 div.removed{
-    visibility: hidden!important;
+    opacity: 0;
 }
 </style>

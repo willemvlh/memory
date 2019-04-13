@@ -1,6 +1,7 @@
 <template>
     <div id="player-container">
         <player v-for="p in playerNames" :key="p" :name="p" :isAtTurn="activePlayer && p === activePlayer.name || false"></player>
+        <p id="cardsLeft">{{cardsLeft}} cards left.</p>
         <div id="after-game" v-if="isFinished">
             <p>{{winnersAsString}}</p>
             <button @click="signalRestart">Play again</button>
@@ -16,7 +17,8 @@ export default {
 props: {
     playerNames: Array,
     activePlayerIndex: Number,
-    isFinished: Boolean
+    isFinished: Boolean,
+    cardsLeft: Number
 },
 data: function(){
     return {
@@ -24,6 +26,9 @@ data: function(){
     }
 },
 methods: {
+    incrementAttemptsOfActivePlayer: function(){
+        this.activePlayer.increaseAttempts();
+    },
     incrementScoreOfActivePlayer: function(){
         this.activePlayer.increaseScore();
     },
@@ -52,7 +57,7 @@ computed: {
         return null;
     },
     isTied: function(){
-        return this.winners.length > 1;
+        return this.winners && this.winners.length > 1;
     }
 },
 components: {

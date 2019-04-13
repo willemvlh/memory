@@ -3,9 +3,14 @@
     <startSettings v-on:start="start($event)" v-if="!started"></startSettings>
     <div id="game" v-if="started">
       <div id="card-container">
-        <card v-for="(item, i) in this.cardsForPlay" v-bind:key="'card-' + i" :value="item" ref="cards"></card>
+        <card @cardFlip="checkForMatch" @cardCreated="storeCard($event)" v-for="(item, i) in this.cardsForPlay" v-bind:key="'card-' + i" :value="item" ref="cards" :totalCards="cardsForPlay.length"></card>
       </div>
-      <players ref="playerContainer" :playerNames="playerNames" :activePlayerIndex="activePlayerIndex" :isFinished="isFinished" @restart="reset"></players>
+      <players ref="playerContainer" 
+      :playerNames="playerNames" 
+      :activePlayerIndex="activePlayerIndex" 
+      :isFinished="isFinished"
+      :cardsLeft="cardsLeft"
+      @restart="reset"></players>
     </div>
   </div>
 </template>
@@ -25,36 +30,27 @@ export default {
   name: 'app',
   data: function(){
     return {
-      flippedCards: [],
       cardsForPlay: [],
       playerNames: ["Player1", "Player2"],
       activePlayerIndex: 0,
       started: false,
       startSettings: null,
-      isFinished: false
+      isFinished: false,
+      cards: []
     }
   },
-  props: {
-    someProp: String
-  },
   computed: {
-    cards: function(){
-      return this.$refs.cards
+    flippedCards: function(){
+      return this.cards.filter(c => c.isTurned && !c.isRemovedFromPlay);
+    },
+    cardsLeft: function(){
+      return this.cardsForPlay.length - this.removedCards.length;
     },
     removedCards: function(){
       return this.cards.filter(c => c.isRemovedFromPlay);
     },
-    firstCard: function(){
-      return this.flippedCards[0] || null;
-    },
-    secondCard: function(){
-      return this.flippedCards[1] || null;
-    },
     isMatch: function(){
-      if(this.firstCard && this.secondCard){
-        return this.firstCard.value === this.secondCard.value;
-      }
-      return false;
+      return this.flippedCards.length == 2 && _.uniq(this.flippedCards.map(c => c.value)).length == 1;
     }
   },
   components: {
@@ -68,33 +64,33 @@ export default {
       let cards = singleCards.concat(singleCards);
       return _.shuffle(cards);
     },
-    addCard: function(card){
-      this.flippedCards.push(card);
-      if(this.firstCard && this.secondCard) this.checkForMatch();
-    },
-    removeCard: function(card){
-      _.pull(this.flippedCards, card);
+    storeCard: function(card){
+      this.cards.push(card);
     },
     nextPlayer: function(){
       this.activePlayerIndex++;
     },
     checkForMatch: function(){
+      if(this.flippedCards.length < 2){
+        return;
+      }
+
       let that = this;
       setTimeout(function() {
         if(that.isMatch) {
           console.log("Match!");
-          that.firstCard.removeFromPlay();
-          that.secondCard.removeFromPlay();
-          that.flippedCards = [];
+          that.flippedCards.forEach(c => c.removeFromPlay());
           that.$refs.playerContainer.incrementScoreOfActivePlayer();
           that.checkForFinish();
         }
         else{
           console.log("No match...");
-            that.firstCard.flip();
-            that.secondCard.flip();
+            while(that.flippedCards.length > 0){
+              that.flippedCards[0].flip();
+            };
             that.nextPlayer();
         }
+        that.$refs.playerContainer.incrementAttemptsOfActivePlayer();
       }, 1000);
         
     },
@@ -136,5 +132,13 @@ export default {
 
   div#game{
     display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  div#app{
+    height: 100%;
+    width: 100%;
+    position: absolute;
   }
 </style>

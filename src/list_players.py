@@ -1,3 +1,5 @@
+# write json file based on image files
+
 import os
 import json
 
