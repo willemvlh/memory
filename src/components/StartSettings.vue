@@ -1,29 +1,31 @@
 <template>
-    <modal @modalSubmit="start($event)" :items="modalObjects" :id="'startSettings'"></modal>
+   <div class="modal-mask">
+        <div class="modal">
+            <div class="form">
+                <div class="form-entry">
+                    <label for="players">Players:</label> 
+                    <input type="text" id="players" v-model="commaSeparatedPlayers">
+                </div>
+                <div class="form-entry">
+                    <label for="numberOfCards">Number of cards:</label>
+                    <input type="radio" name="numberOfCards" v-model="numberOfCards" value="8" >8
+                    <input type="radio" name="numberOfCards" v-model="numberOfCards" value="16">16
+                    <input type="radio" name="numberOfCards" v-model="numberOfCards" value="32">32
+                </div>
+                <button v-on:click="start">Start</button>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
-import Modal from './Modal.vue';
 
 export default {
     data: function(){
         return {
             commaSeparatedPlayers: "",
-            numberOfCards: 0,
-            modalObjects: [{
-                label: "Players",
-                identifier: "players",
-                type: "text"
-            },
-            {
-                label: "Number of cards",
-                identifier: "numberOfCards",
-                type: "number"
-            }]
+            numberOfCards: 0
         }
-    },
-    components: {
-        'modal': Modal
     },
     computed: {
       players: function(){
@@ -31,10 +33,8 @@ export default {
       }  
     },
     methods: {
-        start: function(response){
-            this.commaSeparatedPlayers = response.items.find(i => i.identifier === "players").value;
-            this.numberOfCards = Number(response.items.find(i => i.identifier === "numberOfCards").value);
-            this.$emit("start", {players: this.players, numberOfCards: this.numberOfCards});
+        start: function(){
+            this.$emit("start", {players: this.players, numberOfCards: this.numberOfCards})
         }
     }
 }
@@ -60,4 +60,6 @@ export default {
         padding: 24px;
         border-radius: 14px;
     }
+
+    
 </style>
