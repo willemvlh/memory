@@ -11,14 +11,16 @@ body{
 }
 
 button{
-    $bg: #36b42f;
+    $bg: #57c657;;
+    box-shadow: $box-shadow;
     background-color: $bg;
-    border: solid 1px #aaa;
-    padding: 8px 12px;
+    padding: 9px;
+    font-family: "Roboto", sans-serif;
     color: white;
-    font-family: inherit;
-    box-shadow: 1px 1px 3px #aaa;
-    border-radius: 5px;
+    text-transform: uppercase;
+    border: $border;
+    border-radius: 3px;
+
     &:active{
         background-color: darken($bg, 10%);
     }
