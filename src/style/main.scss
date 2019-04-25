@@ -1,9 +1,25 @@
 $black: #333;
 $box-shadow: 1px 1px 5px #aaa;
 $border: solid 1px #aaa;
-
+$size-small: "screen and (max-width: 800px)";
+$size-medium: "screen and (max-width: 1000px)";
+@import url('https://rsms.me/inter/inter.css');
 body{
-    font-family: "Roboto", sans-serif;
+    font-family: "Inter", sans-serif;
     margin: 0;
     padding: 0;
+}
+
+button{
+    $bg: #36b42f;
+    background-color: $bg;
+    border: solid 1px #aaa;
+    padding: 8px 12px;
+    color: white;
+    font-family: inherit;
+    box-shadow: 1px 1px 3px #aaa;
+    border-radius: 5px;
+    &:active{
+        background-color: darken($bg, 10%);
+    }
 }

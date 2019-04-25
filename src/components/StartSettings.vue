@@ -20,7 +20,7 @@ export default {
                 identifier: "numberOfCards",
                 type: "number"
             }]
-        }
+        };
     },
     components: {
         'modal': Modal
@@ -37,27 +37,9 @@ export default {
             this.$emit("start", {players: this.players, numberOfCards: this.numberOfCards});
         }
     }
-}
+};
 </script>
 
 <style lang="scss">
-    .modal-mask{
-        width: 100%;
-        height: 100%;
-        position: fixed;
-        background-color: rgba(0,0,0,0.6);
-        z-index: 999
-    }
-    .modal{
-        margin-left: auto;
-        margin-right: auto;
-        width: 40%;
-        background-color: #efefef;
-        box-shadow: 3px 3px 3px #333;
-        display: flex;
-        margin-top: 80px;
-        flex-direction: column;
-        padding: 24px;
-        border-radius: 14px;
-    }
+   
 </style>

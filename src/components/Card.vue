@@ -1,48 +1,39 @@
 <template>
-    <div class="card" :class="{isTurned: isTurned, removed: isRemovedFromPlay}" :style="{width: widthPx, height: heightPx}" @click="flip()">
-        <div class="card-inner">
+    <div class="card" :class="classArray" @click="flip()">
+        <div class="card-inner" :style="{transition: settings.showFlipAnimation ? 'all 0.5s' : 'none'}">
             <div class="card-front">
-                <img class="card-image" src='../assets/card.jpg' :style="{width: widthPx, height: heightPx}"/>
+                <img class="card-image" src='../assets/card.jpg'/>
             </div>
             <div class="card-back">
-                <img class="card-image" :src="'./football/' + value" :style="{width: widthPx, height: heightPx}"/>
+                <img class="card-image" :src="'./football/' + value"/>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import {EventBus} from './EventBus.js';
+
 export default {
     name: "card",
     props: {
-        color: String,
         value: String,
         totalCards: Number
     },
     data: function(){
         return {
             isTurned: false,
-            isRemovedFromPlay: false
-        }
+            isRemovedFromPlay: false,
+            settings: {
+                showFlipAnimation: true,
+                showSmallCards: false
+            }
+        };
     },
     computed: {
-        height: function(){
-            if(!this.totalCards){
-                return 140;
-            }
-            let calculated = 160 - (this.totalCards * 1.3);
-            return Math.max(calculated, 100);
-        },
-        width: function(){
-            return this.height / 1.4;
-        },
-        widthPx: function(){
-            return this.width + "px";
-        },
-        heightPx: function(){
-            return this.height + "px";
+        classArray: function(){
+            return [this.isTurned ? "isTurned" : "", this.isRemovedFromPlay ? "removed" : "", this.settings.showSmallCards ? "small" : "medium"];
         }
-
     },
     methods: {
         flip: function(){
@@ -60,20 +51,71 @@ export default {
         reset(){
             this.isRemovedFromPlay = false;
             this.isTurned = false;
+        },
+        updateSettings: function(settings){
+            this.settings = settings;
         }
     },
     mounted: function(){
         this.isTurned = false;
         this.isRemovedFromPlay = false;
         this.$emit("cardCreated", this);
+        let vm = this;
+        EventBus.$on("settingsUpdate", function(settings) {
+            vm.updateSettings(settings);
+        });
     }
-}
+};
+
 </script>
 
 <style lang="scss" scoped>
 
+$size: 120px;
+
+$card-size-medium: 100px;
+$card-size-small: 75px;
+$card-size-smaller: 65px;
+
+$margin-medium: 8px;
+$margin-small: 3px;
+$margin-smaller: 2px;
+
+$size-small: "screen and (max-width: 800px)";
+$size-medium: "screen and (max-width: 1000px)";
+
+@mixin small-size{
+    width: $card-size-small;
+    height: $card-size-small;
+    margin: $margin-small;
+}
+
+div.small{
+    @include small-size();
+}
+
+div.smaller{
+    width: $card-size-smaller!important;
+    height: $card-size-smaller!important;
+    margin: $margin-smaller!important;
+}
+
+div.medium{
+    width: $size;
+    height: $size;
+    margin: 10px;   
+
+    @media #{$size-medium} {
+        width: $card-size-medium;
+        height: $card-size-medium;
+        margin: $margin-medium
+    }
+    @media #{$size-small} {
+        @include small-size();
+    }
+}
+
 div.card{
-    margin: 10px;
     transition: opacity 0.5s;
     &:hover{
         cursor: pointer;
@@ -83,7 +125,6 @@ div.card{
 .card-inner{
     position: relative;
     transform-style: preserve-3d;
-    transition: all 0.3s ease-in-out;
 }
 
 .isTurned .card-back .card-image, .card-front .card-image{
@@ -113,6 +154,7 @@ div.card{
 
 img{
     object-fit: cover;
+    width: 100%;;
 }
 
 div.removed{

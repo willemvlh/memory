@@ -24,16 +24,16 @@ export default {
                 return {
                     value: "",
                     identifier: i.identifier
-                }
+                };
             })
-        }
+        };
     },
     methods: {
         submit: function(){
             this.$emit("modalSubmit", {items: this.myItems, id: this.id});
         }
     }
-}
+};
 </script>
 
 <style lang="scss">
@@ -47,7 +47,7 @@ export default {
     .modal{
         margin-left: auto;
         margin-right: auto;
-        width: 40%;
+        width: max-content;
         background-color: #efefef;
         box-shadow: 3px 3px 3px #333;
         display: flex;

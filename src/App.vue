@@ -10,7 +10,8 @@
       :activePlayerIndex="activePlayerIndex" 
       :isFinished="isFinished"
       :cardsLeft="cardsLeft"
-      @restart="reset"></players>
+      @restart="reset"
+     ></players>
     </div>
   </div>
 </template>
@@ -36,7 +37,8 @@ export default {
       started: false,
       startSettings: null,
       isFinished: false,
-      cards: []
+      cards: [],
+      settings: {}
     }
   },
   computed: {
@@ -124,6 +126,7 @@ export default {
     flex: 7;
     flex-wrap: wrap;
     height: 100%;
+    justify-content: center;
   }
 
   div#player-container{

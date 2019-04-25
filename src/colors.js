@@ -1,8 +1,8 @@
-import _ from "lodash"
+import _ from "lodash";
 
 export default {
     colors: ["red", "green", "blue"],
     randomColor: function(){
-        return _.sample(this.colors)
+        return _.sample(this.colors);
     }
-}
+};
