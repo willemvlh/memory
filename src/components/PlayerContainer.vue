@@ -45,6 +45,10 @@ export default {
             this.activePlayer.increaseScore();
         },
         signalRestart: function(){
+            this.timeElapsed = 0;
+            this.players.forEach(p => {
+                p.reset();
+            });
             this.$emit("restart");
         },
         addPlayer: function(player){
@@ -99,7 +103,8 @@ export default {
         border: $border;
         box-shadow: $box-shadow;
         padding: 13px;
-        margin: 13px;
+        margin: 13px auto;
+        width: 80%;
         display: flex;
         justify-content: space-between;
 
@@ -129,4 +134,5 @@ export default {
             margin-bottom: 6px;
         }
     }
+
 </style>

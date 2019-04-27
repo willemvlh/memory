@@ -30,6 +30,9 @@ export default {
         },
         increaseAttempts: function(){
             this.attempts = this.attempts + 1;
+        },
+        reset: function(){
+            this.score = this.attempts = 0;
         }
     },
     created: function(){

@@ -141,6 +141,10 @@ div.card{
     transform: rotateY(180deg);
 }
 
+.card-image{
+    background: white;
+}
+
 .card-front, .card-back{
     position: absolute;
     width: 100%;
