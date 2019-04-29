@@ -4,7 +4,7 @@
             <div class="form">
                 <div class="form-item">
                     <label for="players">Number of  players:</label> 
-                    <input type="number" id="players" v-model.number="numberOfPlayers">
+                    <input type="number" id="players" v-model.number="numberOfPlayers" min="1">
                 </div>
                 <form-item v-for="n in numberOfPlayers" :key="'player' + n" :index="n"
                     @created="created($event)" @destroyed="destroyed()"></form-item>
@@ -13,7 +13,9 @@
                     <div class="inputs">
                         <input type="radio" name="numberOfCards" v-model="numberOfCards" value="8" >8
                         <input type="radio" name="numberOfCards" v-model="numberOfCards" value="16">16
+                        <input type="radio" name="numberOfCards" v-model="numberOfCards" value="24">24
                         <input type="radio" name="numberOfCards" v-model="numberOfCards" value="32">32
+                        <input type="radio" name="numberOfCards" v-model="numberOfCards" value="48">48
                     </div>
                 </div>
                 <button v-on:click="start">Start</button>
@@ -30,7 +32,7 @@ export default {
         return {
             commaSeparatedPlayers: "",
             numberOfCards: 0,
-            numberOfPlayers: 0,
+            numberOfPlayers: 1,
             pl: []
         }
     },
@@ -56,7 +58,9 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+$size-small: "screen and (max-width: 450px)";
+
 
     div.form{
         display: grid;
@@ -66,10 +70,8 @@ export default {
         font-size: 0.8em;
         margin-bottom: 16px;
 
-    }
+        
 
-    input{
-        font-family: "Inter";
     }
 
     .modal-mask{
@@ -90,20 +92,15 @@ export default {
         flex-direction: column;
         padding: 24px;
         border-radius: 14px;
-    }
 
-    input[type=checkbox]{
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        width: 16px;
-        height: 16px;
-        border: solid 1px #aaa;
-
-        &:checked:after{
-            content: 'X'    
+        @media #{$size-small} {
+            width: 90%;
+            padding: 12px;
         }
-
     }
 
-    
+    input#players{
+        width: 50px;
+        font-size: 14px;
+    }
 </style>

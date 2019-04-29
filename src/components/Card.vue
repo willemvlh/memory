@@ -71,14 +71,14 @@ export default {
 
 <style lang="scss" scoped>
 
-$size: 120px;
+$size: 106px;
 
 $card-size-medium: 100px;
 $card-size-small: 75px;
 $card-size-smaller: 65px;
 
-$margin-medium: 8px;
-$margin-small: 3px;
+$margin-medium: 2px;
+$margin-small: 2px;
 $margin-smaller: 2px;
 
 $size-small: "screen and (max-width: 800px)";

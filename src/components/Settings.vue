@@ -35,9 +35,17 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 div#settings{
     text-align: right;
-    flex: 1;
+    .form-entry{
+        display: grid;
+        grid-template-columns: 4fr 1fr;
+        column-gap: 8px;
+        margin-bottom: 6px;
+        input[type=checkbox]{
+            margin: 0
+        }
+    }
 }
 </style>

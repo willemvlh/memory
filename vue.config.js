@@ -5,5 +5,6 @@ module.exports = {
                 data:  `@import "@/style/main.scss";`
             }
         }
-    }
+    },
+    publicPath: process.env.NODE_ENV === 'production' ? '/memory' : '/'
 }

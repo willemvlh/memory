@@ -21,12 +21,12 @@ export default {
     },
     computed: {
         successRate: function(){
-            return Math.round(this.score / this.attempts * 100) || 0;
+            return Math.round((this.score / 2) / this.attempts * 100) || 0;
         }
     },
     methods: {
         increaseScore: function(){
-            this.score = this.score + 1;
+            this.score = this.score + 2;
         },
         increaseAttempts: function(){
             this.attempts = this.attempts + 1;
@@ -47,6 +47,7 @@ export default {
         flex-direction: column;
         flex: 2;
         margin-right: 25px;
+        min-width: 100px;
     }
     div.name{
         flex: 2;

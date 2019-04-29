@@ -3,12 +3,16 @@ $box-shadow: 1px 1px 5px #aaa;
 $border: solid 1px #aaa;
 $size-small: "screen and (max-width: 800px)";
 $size-medium: "screen and (max-width: 1000px)";
-@import url('https://rsms.me/inter/inter.css');
 body{
-    font-family: "Inter", sans-serif;
+    font-family: "Segoe UI", "Roboto", sans-serif;
     margin: 0;
     padding: 0;
 }
+
+input{
+    font-family: "Segoe UI", "Roboto", sans-serif;
+}
+
 
 button{
     $bg: #57c657;;
@@ -24,4 +28,28 @@ button{
     &:active{
         background-color: darken($bg, 10%);
     }
+}
+
+input[type=checkbox]{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 16px;
+    height: 16px;
+    border: solid 1px #aaa;
+    position: relative;
+
+    &:checked:after{
+        content: '✔';
+        position: absolute; 
+        height: 100%;
+        width: 100%;
+        text-align: center;
+        bottom: 1px;
+        color: #005360;   
+    }
+    &:checked{
+        box-shadow: 0px 0px 3px #8cccff;
+        border: solid 1px #29afff;
+    }
+
 }

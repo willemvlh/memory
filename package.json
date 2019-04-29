@@ -43,7 +43,9 @@
     }
   },
   "postcss": {
-    "plugins": {}
+    "plugins": {
+      "autoprefixer": {}
+    }
   },
   "browserslist": [
     "> 1%",

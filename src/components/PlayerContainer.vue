@@ -1,20 +1,22 @@
 <template>
-    <div id="player-container">
-        <div id="players">
-        <player @playerCreated="addPlayer"
-         v-for="p in playerNames" 
-         :key="p" :name="p" 
-         :isAtTurn="activePlayer && p === activePlayer.name || false"></player>
-         </div>
-        <div id="stats">
-            <div id="cardsLeft">{{cardsLeft}} cards left.</div>
-            <div id="totalTime">Time elapsed: {{timeElapsedString}}</div>
-        </div>
+    <div>
         <div id="after-game" v-if="isFinished">
-            <p>{{winnersAsString}}</p>
-            <button @click="signalRestart">Play again</button>
+                <p>{{winnersAsString}}</p>
+                <button @click="signalRestart">Play again</button>
         </div>
-        <settings></settings>
+        <div id="player-container">
+            <div id="players">
+            <player @playerCreated="addPlayer"
+            v-for="p in playerNames" 
+            :key="p" :name="p" 
+            :isAtTurn="activePlayer && p === activePlayer.name || false"></player>
+            </div>
+            <div id="stats">
+                <div id="cardsLeft">{{cardsLeft}} cards left.</div>
+                <div id="totalTime">Time elapsed: {{timeElapsedString}}</div>
+            </div>
+            <settings></settings>
+        </div>
     </div>
 </template>
 
@@ -98,13 +100,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+    div#after-game{
+        margin: 0 auto 100px auto;
+        padding: 24px;
+        width: max-content;
+        text-align: center;
+        border: $border;
+        box-shadow: $box-shadow;
+    }
     div#player-container{
         font-size: 0.8em;
         border: $border;
         box-shadow: $box-shadow;
         padding: 13px;
         margin: 13px auto;
-        width: 80%;
+        width: max-content;
         display: flex;
         justify-content: space-between;
 
@@ -126,9 +136,9 @@ export default {
 
     div#stats{
         margin-left: 6px;
+        min-width: 150px;
         display: flex;
         flex-direction: column;
-        flex: 3;
 
         #cardsLeft{
             margin-bottom: 6px;
