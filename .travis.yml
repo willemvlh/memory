@@ -3,7 +3,6 @@ node_js:
   - "node"
 deploy:
   provider: pages
-  local_dir: './dist'
   skip_cleanup: true
   github_token: $GITHUB_TOKEN
   on:
