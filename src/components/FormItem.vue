@@ -1,7 +1,7 @@
 <template>
   <div class="form-item">
     <label>Player {{this.index}}</label>
-    <input type="text" v-model="name">
+    <input type="text" v-model="name" placeholder="name" required>
   </div>
 </template>
 
@@ -39,6 +39,7 @@ $size-small: "screen and (max-width: 450px)";
 
 input[type="text"], input[type="number"] {
   $shadow: 0px 0px 3px #aaa;
+  $shadow-invalid: 0px 0px 3px #ff5656;
   border: $border;
   padding: 6px;
   &:hover{
@@ -47,6 +48,10 @@ input[type="text"], input[type="number"] {
 
   &:focus{
       box-shadow: $shadow;
+  }
+
+  &:invalid{
+      box-shadow: $shadow-invalid;
   }
 }
 </style>

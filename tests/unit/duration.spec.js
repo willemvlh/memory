@@ -1,5 +1,4 @@
 import duration from "@/duration.js";
-import { isIterable } from "core-js";
 
 describe("Duration", () => {
     it("should be 00:00:05 for 5 seconds", () => {

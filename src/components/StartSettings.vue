@@ -31,10 +31,10 @@ export default {
     data: function(){
         return {
             commaSeparatedPlayers: "",
-            numberOfCards: 0,
+            numberOfCards: 24,
             numberOfPlayers: 1,
             pl: []
-        }
+        };
     },
     computed: {
       players: function(){
@@ -43,13 +43,17 @@ export default {
     },
     methods: {
         start: function(){
-            this.$emit("start", {players: this.players, numberOfCards: this.numberOfCards});
+            if(this.validateSettings())
+                this.$emit("start", {players: this.players, numberOfCards: this.numberOfCards});
         },
         created: function(e){
             this.pl.push(e);
         },
         destroyed: function(){
            this.pl.length--;
+        },
+        validateSettings: function(){
+            return this.numberOfPlayers > 0 && this.players.filter(p => !p).length === 0;
         }
     },
     components: {

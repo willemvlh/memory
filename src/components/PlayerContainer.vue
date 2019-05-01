@@ -115,17 +115,23 @@ export default {
         padding: 13px;
         margin: 13px auto;
         width: max-content;
+        max-width: 98%;
         display: flex;
         justify-content: space-between;
 
         > div{
             padding: 0 14px;
+            @media #{$size-small} {
+                margin: 0 auto;
+                box-shadow: 0;
+            }
         }
 
         @media #{$size-small} {
-            margin: 0;
+            margin: 0 auto;
             box-shadow: 0;
-            font-size: 0.6em;
+            max-width: 100%;
+            font-size: 0.7em;
         }
 
     }
@@ -142,6 +148,10 @@ export default {
 
         #cardsLeft{
             margin-bottom: 6px;
+        }
+
+        @media #{$size-small} {
+            display: none;
         }
     }
 

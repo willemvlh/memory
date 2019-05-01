@@ -48,6 +48,11 @@ export default {
         flex: 2;
         margin-right: 25px;
         min-width: 100px;
+
+        @media #{$size-small} {
+            min-width: 0;
+            margin: 0 5px;
+        }
     }
     div.name{
         flex: 2;

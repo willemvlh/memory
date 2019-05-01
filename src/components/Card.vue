@@ -129,7 +129,8 @@ div.card{
 
 .isTurned .card-back .card-image, .card-front .card-image{
     box-shadow: $box-shadow;
-    border: solid 1px #aaa;
+    border: $border;
+
 }
 
 .isTurned .card-front .card-image{
@@ -139,6 +140,7 @@ div.card{
 
 .isTurned .card-inner{
     transform: rotateY(180deg);
+
 }
 
 .card-image{

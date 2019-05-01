@@ -47,5 +47,6 @@ div#settings{
             margin: 0
         }
     }
+
 }
 </style>
