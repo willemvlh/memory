@@ -4,6 +4,11 @@ node_js:
 script:
   - npm test
   - npm run build
+jobs:
+  include:
+    - stage: Produce coverage
+      node_js: node
+      script: npm run coverage | npx coveralls
 deploy:
   provider: pages
   local_dir: './dist'
