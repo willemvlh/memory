@@ -2,6 +2,7 @@
   <div id="app">
     <startSettings v-on:start="start($event)" v-if="!started"></startSettings>
     <div id="game" v-if="started">
+      <after-game :winners="winners" @reset="reset" v-if="isFinished"/>
       <div id="card-container">
         <card @cardFlip="checkForMatch" @cardCreated="storeCard($event)" v-for="(item, i) in this.cardsForPlay" v-bind:key="'card-' + i" :value="item" ref="cards" :totalCards="cardsForPlay.length"></card>
       </div>
@@ -10,8 +11,9 @@
       :activePlayerIndex="activePlayerIndex" 
       :isFinished="isFinished"
       :cardsLeft="cardsLeft"
-      @restart="reset"
+      @winner="winners=$event"
      ></players>
+     <a href="https://www.github.com/wasmachien75/memory" id="github"><img src="./assets/github.png"></a>
     </div>
   </div>
 </template>
@@ -24,6 +26,7 @@ import Player from './components/Player.vue';
 import Pictures from './players.json';
 import PlayerContainer from './components/PlayerContainer.vue';
 import StartSettings from './components/StartSettings.vue';
+import AfterGame from'./components/AfterGame.vue';
 import _ from "lodash";
 import { setTimeout } from 'timers';
 
@@ -38,7 +41,8 @@ export default {
       startSettings: null,
       isFinished: false,
       cards: [],
-      settings: {}
+      settings: {},
+      winners: ""
     }
   },
   computed: {
@@ -58,7 +62,8 @@ export default {
   components: {
     "card": Card,
     "players": PlayerContainer,
-    "startSettings": StartSettings
+    "startSettings": StartSettings,
+    "after-game": AfterGame
   },
   methods: {
     prepareCards: function(){
@@ -131,6 +136,21 @@ export default {
 
   div#player-container{
     flex: 1;
+  }
+
+  a#github{
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    width: max-content;
+    opacity: 0.2;
+    transition: opacity 1s;
+    &:hover{
+      opacity: 1;
+    }
+    @media screen and (max-width: 900px) {
+      display: none;
+    }
   }
 
   div#game{

@@ -1,9 +1,5 @@
 <template>
     <div>
-        <div id="after-game" v-if="isFinished">
-                <p>{{winnersAsString}}</p>
-                <button @click="signalRestart">Play again</button>
-        </div>
         <div id="player-container">
             <div id="players">
             <player @playerCreated="addPlayer"
@@ -46,13 +42,6 @@ export default {
         incrementScoreOfActivePlayer: function(){
             this.activePlayer.increaseScore();
         },
-        signalRestart: function(){
-            this.timeElapsed = 0;
-            this.players.forEach(p => {
-                p.reset();
-            });
-            this.$emit("restart");
-        },
         addPlayer: function(player){
             this.players.push(player);
         }
@@ -84,6 +73,12 @@ export default {
             return duration(this.timeElapsed);
         }
     },
+    watch: {
+        isFinished: function(val){
+            if(val)
+                this.$emit("winner", this.winnersAsString);
+        }
+    },
     components: {
         'player': Player,
         'settings': Settings
@@ -100,14 +95,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    div#after-game{
-        margin: 0 auto 100px auto;
-        padding: 24px;
-        width: max-content;
-        text-align: center;
-        border: $border;
-        box-shadow: $box-shadow;
-    }
     div#player-container{
         font-size: 0.8em;
         border: $border;
