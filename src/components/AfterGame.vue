@@ -20,7 +20,7 @@ export default {
 
 <style lang="scss">
  div#after-game{
-        margin: 150px auto;
+        margin: 15px auto;
         padding: 24px;
         width: max-content;
         text-align: center;
