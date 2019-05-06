@@ -7,7 +7,9 @@ import { AssertionError } from 'assert';
 function newVM(){
   return shallowMount(Card, {
     propsData: {
-      value: "neymar.png"
+      value: "neymar.png",
+      settings: {showSmallCards: false, showFlipAnimation: true},
+      totalCards: 16
     }
   })
 }
@@ -28,14 +30,6 @@ describe('Card.vue', () => {
     })
   });
 
-  describe("on settings update", () => {
-    let wrapper = newVM();
-    let settings = {test: "settings"};
-    EventBus.$emit("settingsUpdate", settings);
-    it("settings should be updated", () => {
-      expect(wrapper.vm.settings).toBe(settings);
-    })
-  })
   describe("when clicked", () => {
     let flippedWrapper  = newVM();
     flippedWrapper.trigger("click");

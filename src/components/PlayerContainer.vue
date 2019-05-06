@@ -44,6 +44,10 @@ export default {
         },
         addPlayer: function(player){
             this.players.push(player);
+        },
+        reset: function(){
+            this.players.forEach(p => p.reset());
+            this.timeElapsed = 0;
         }
     },
     computed: {

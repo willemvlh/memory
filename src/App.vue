@@ -122,6 +122,7 @@ export default {
     },
     reset() {
       this.isFinished = false;
+      this.$refs.playerContainer.reset();
       this.cards.forEach(c => {
         c.reset();
       });
