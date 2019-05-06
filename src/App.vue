@@ -3,25 +3,8 @@
     <startSettings v-on:start="start($event)" v-if="!started"></startSettings>
     <div id="game" v-if="started">
       <after-game :winners="winners" @reset="reset" v-if="isFinished"/>
-      <div id="card-container" v-if="!isFinished">
-        <card
-          @cardFlip="checkForMatch"
-          @cardCreated="storeCard($event)"
-          v-for="(item, i) in this.cardsForPlay"
-          v-bind:key="'card-' + i"
-          :value="item"
-          ref="cards"
-          :totalCards="cardsForPlay.length"
-        ></card>
-      </div>
-      <players
-        ref="playerContainer"
-        :playerNames="playerNames"
-        :activePlayerIndex="activePlayerIndex"
-        :isFinished="isFinished"
-        :cardsLeft="cardsLeft"
-        @winner="winners=$event"
-      ></players>
+      <card-container :cardsForPlay="this.cardsForPlay" @storeCard="storeCard($event)" @checkForMatch="checkForMatch" v-if="!isFinished"/>
+      <players ref="playerContainer" :playerNames="playerNames" :activePlayerIndex="activePlayerIndex" :isFinished="isFinished" :cardsLeft="cardsLeft" @winner="winners=$event"/>
       <a href="https://www.github.com/wasmachien75/memory" id="github">
         <img src="./assets/github.png">
       </a>
@@ -31,8 +14,7 @@
 
 <script>
 /* eslint-disable */
-
-import Card from "./components/Card.vue";
+import CardContainer from './components/CardContainer.vue';
 import Player from "./components/Player.vue";
 import Pictures from "./players.json";
 import PlayerContainer from "./components/PlayerContainer.vue";
@@ -46,13 +28,12 @@ export default {
   data: function() {
     return {
       cardsForPlay: [],
-      playerNames: ["Player1", "Player2"],
+      playerNames: [],
       activePlayerIndex: 0,
       started: false,
       startSettings: null,
       isFinished: false,
       cards: [],
-      settings: {},
       winners: ""
     };
   },
@@ -74,10 +55,10 @@ export default {
     }
   },
   components: {
-    card: Card,
     players: PlayerContainer,
     startSettings: StartSettings,
-    "after-game": AfterGame
+    "after-game": AfterGame,
+    "card-container": CardContainer
   },
   methods: {
     prepareCards: function() {
@@ -98,7 +79,6 @@ export default {
       if (this.flippedCards.length < 2) {
         return;
       }
-
       let that = this;
       setTimeout(function() {
         if (that.isMatch) {
@@ -141,12 +121,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-div#card-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
 div#player-container {
   flex: 1;
 }
