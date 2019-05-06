@@ -12,22 +12,17 @@
 </template>
 
 <script>
-import {EventBus} from './EventBus.js';
-
 export default {
     name: "card",
     props: {
         value: String,
-        totalCards: Number
+        totalCards: Number,
+        settings: Object
     },
     data: function(){
         return {
             isTurned: false,
-            isRemovedFromPlay: false,
-            settings: {
-                showFlipAnimation: true,
-                showSmallCards: false
-            }
+            isRemovedFromPlay: false
         };
     },
     computed: {
@@ -60,10 +55,6 @@ export default {
         this.isTurned = false;
         this.isRemovedFromPlay = false;
         this.$emit("cardCreated", this);
-        let vm = this;
-        EventBus.$on("settingsUpdate", function(settings) {
-            vm.updateSettings(settings);
-        });
     }
 };
 

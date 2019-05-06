@@ -7,6 +7,7 @@
           v-bind:key="'card-' + i"
           :value="item"
           :totalCards="cardsForPlay.length"
+          :settings="settings"
         ></card>
       </div>
 </template>
@@ -16,7 +17,8 @@ import Card from "./Card.vue";
 
 export default {
     props: {
-        cardsForPlay: Array
+        cardsForPlay: Array,
+        settings: Object,
     },
     methods: {
         checkForMatch: function(){

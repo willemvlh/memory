@@ -3,7 +3,7 @@
     <startSettings v-on:start="start($event)" v-if="!started"></startSettings>
     <div id="game" v-if="started">
       <after-game :winners="winners" @reset="reset" v-if="isFinished"/>
-      <card-container :cardsForPlay="this.cardsForPlay" @storeCard="storeCard($event)" @checkForMatch="checkForMatch" v-if="!isFinished"/>
+      <card-container :settings="settings" :cardsForPlay="this.cardsForPlay" @storeCard="storeCard($event)" @checkForMatch="checkForMatch" v-if="!isFinished"/>
       <players ref="playerContainer" :playerNames="playerNames" :activePlayerIndex="activePlayerIndex" :isFinished="isFinished" :cardsLeft="cardsLeft" @winner="winners=$event"/>
       <a href="https://www.github.com/wasmachien75/memory" id="github">
         <img src="./assets/github.png">
@@ -22,6 +22,7 @@ import StartSettings from "./components/StartSettings.vue";
 import AfterGame from "./components/AfterGame.vue";
 import _ from "lodash";
 import { setTimeout } from "timers";
+import { EventBus } from './components/EventBus.js';
 
 export default {
   name: "app",
@@ -34,8 +35,15 @@ export default {
       startSettings: null,
       isFinished: false,
       cards: [],
+      settings: {},
       winners: ""
     };
+  },
+  mounted: function(){
+    let vm = this;
+    EventBus.$on("settingsUpdate", function(settings) {
+        vm.updateSettings(settings);
+    });
   },
   computed: {
     flippedCards: function() {
@@ -68,6 +76,9 @@ export default {
       );
       let cards = singleCards.concat(singleCards);
       return _.shuffle(cards);
+    },
+    updateSettings: function(settings){
+      this.settings = settings;
     },
     storeCard: function(card) {
       this.cards.push(card);
