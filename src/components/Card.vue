@@ -47,9 +47,6 @@ export default {
             this.isRemovedFromPlay = false;
             this.isTurned = false;
         },
-        updateSettings: function(settings){
-            this.settings = settings;
-        }
     },
     mounted: function(){
         this.isTurned = false;

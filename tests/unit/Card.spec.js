@@ -1,8 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
 import Card from '@/components/Card.vue'
-import {EventBus} from '@/components/EventBus.js';
-import { AssertionError } from 'assert';
-
 
 function newVM(){
   return shallowMount(Card, {
@@ -21,9 +18,11 @@ describe('Card.vue', () => {
   describe("when mounted", () => {
     it('should be unturned', () => {
       expect(wrapper.vm.isTurned).toBe(false);
+      expect(wrapper.classes()).not.toContain("isTurned");
     });
     it('should not be removed', () => {
       expect(wrapper.vm.isRemovedFromPlay).toBe(false);
+      expect(wrapper.classes()).not.toContain("isRemovedFromPlay");
     });
     it('should emit a cardCreated event', () => {
       expect(wrapper.emitted().cardCreated).toBeDefined();
@@ -76,6 +75,21 @@ describe('Card.vue', () => {
       expect(wrapper.vm.isTurned).toBe(false);
     });
   });
+  describe("when applying new settings", () => {
+    let wrapper = newVM();
+    let settings =  {showFlipAnimation: true, showSmallCards: false};
+    wrapper.setProps({settings: settings});
+    it("should have the new settings applied", () => {
+      expect(wrapper.vm.settings).toEqual(settings);
+    })
+    it("should now flip", () => {
+      let div = wrapper.find(".card-inner");
+      expect(div.attributes('style')).toMatch(/transition: all 0.5s/);
+    })
+    
+
+
+  })
 
 
 });
