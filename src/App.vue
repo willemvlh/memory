@@ -26,9 +26,7 @@
 </template>
 
 <script>
-/* eslint-disable */
 import CardContainer from "./components/CardContainer.vue";
-import Player from "./components/Player.vue";
 import Pictures from "./players.json";
 import PlayerContainer from "./components/PlayerContainer.vue";
 import StartSettings from "./components/StartSettings.vue";
@@ -36,6 +34,8 @@ import AfterGame from "./components/AfterGame.vue";
 import _ from "lodash";
 import { setTimeout } from "timers";
 import { EventBus } from "./components/EventBus.js";
+
+const flipDelay = 1000;
 
 export default {
   name: "app",
@@ -101,7 +101,7 @@ export default {
     },
     checkForMatch: function() {
       if (this.flippedCards.length === 2) {
-          setTimeout(this.performCheckForMatch, 1200);
+          setTimeout(this.performCheckForMatch, flipDelay);
       }
     },
     performCheckForMatch: function() {
@@ -114,7 +114,6 @@ export default {
       this.checkForFinish();
     },
     onNoMatch: function() {
-      console.log("there are " + this.flippedCards.length + " flipped card(s)")
       while (this.flippedCards.length > 0) {
         this.flippedCards[0].flip();
       }
