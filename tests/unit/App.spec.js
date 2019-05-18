@@ -3,7 +3,6 @@ import App from "@/App.vue";
 import StartSettings from "@/components/StartSettings.vue";
 import AfterGame from "@/components/AfterGame.vue";
 import _ from "lodash";
-import { doesNotReject } from "assert";
 
 const fakeSettings = { players: ["Peter"], numberOfCards: 8 };
 
@@ -56,24 +55,24 @@ describe("when start settings are submitted", () => {
 describe("when two cards are flipped, they should be checked for equality", () => {
   let wrapper = mount(App);
   wrapper.vm.start(fakeSettings);
-  wrapper.vm
+  wrapper.vm;
   let sortedCards = wrapper.vm.cards.sort((a, b) => a.value > b.value);
   it("if they are the same, they should be removed", () => {
     jest.useFakeTimers();
     let cards = _.take(sortedCards, 2);
-    cards.forEach(c => c.isTurned = true);
+    cards.forEach(c => (c.isTurned = true));
     wrapper.vm.performCheckForMatch();
     expect(cards.every(c => c.isRemovedFromPlay)).toBe(true);
   });
-  it("if they are different, they should not be removed and turned back", (done) => {
+  it("if they are different, they should not be removed and turned back", done => {
     jest.useFakeTimers();
     let cards = Array();
     cards.push(sortedCards[2]);
     cards.push(sortedCards[4]);
-    cards.forEach(c => c.isTurned = true);
+    cards.forEach(c => (c.isTurned = true));
     wrapper.vm.performCheckForMatch();
-      expect(cards.every(c => !c.isRemovedFromPlay && !c.isTurned)).toBe(true);
-      done()
+    expect(cards.every(c => !c.isRemovedFromPlay && !c.isTurned)).toBe(true);
+    done();
   });
 });
 

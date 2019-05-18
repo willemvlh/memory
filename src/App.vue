@@ -101,7 +101,7 @@ export default {
     },
     checkForMatch: function() {
       if (this.flippedCards.length === 2) {
-          setTimeout(this.performCheckForMatch, flipDelay);
+        setTimeout(this.performCheckForMatch, flipDelay);
       }
     },
     performCheckForMatch: function() {
