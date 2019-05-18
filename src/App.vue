@@ -3,8 +3,21 @@
     <startSettings v-on:start="start($event)" v-if="!started"></startSettings>
     <div id="game" v-if="started">
       <after-game :winners="winners" @reset="reset" v-if="isFinished"/>
-      <card-container :settings="settings" :cardsForPlay="this.cardsForPlay" @storeCard="storeCard($event)" @checkForMatch="checkForMatch" v-if="!isFinished"/>
-      <players ref="playerContainer" :playerNames="playerNames" :activePlayerIndex="activePlayerIndex" :isFinished="isFinished" :cardsLeft="cardsLeft" @winner="winners=$event"/>
+      <card-container
+        :settings="settings"
+        :cardsForPlay="this.cardsForPlay"
+        @storeCard="storeCard($event)"
+        @checkForMatch="checkForMatch"
+        v-if="!isFinished"
+      />
+      <players
+        ref="playerContainer"
+        :playerNames="playerNames"
+        :activePlayerIndex="activePlayerIndex"
+        :isFinished="isFinished"
+        :cardsLeft="cardsLeft"
+        @winner="winners=$event"
+      />
       <a href="https://www.github.com/wasmachien75/memory" id="github">
         <img src="./assets/github.png">
       </a>
@@ -14,7 +27,7 @@
 
 <script>
 /* eslint-disable */
-import CardContainer from './components/CardContainer.vue';
+import CardContainer from "./components/CardContainer.vue";
 import Player from "./components/Player.vue";
 import Pictures from "./players.json";
 import PlayerContainer from "./components/PlayerContainer.vue";
@@ -22,7 +35,7 @@ import StartSettings from "./components/StartSettings.vue";
 import AfterGame from "./components/AfterGame.vue";
 import _ from "lodash";
 import { setTimeout } from "timers";
-import { EventBus } from './components/EventBus.js';
+import { EventBus } from "./components/EventBus.js";
 
 export default {
   name: "app",
@@ -39,10 +52,10 @@ export default {
       winners: ""
     };
   },
-  mounted: function(){
+  mounted: function() {
     let vm = this;
     EventBus.$on("settingsUpdate", function(settings) {
-        vm.updateSettings(settings);
+      vm.updateSettings(settings);
     });
   },
   computed: {
@@ -77,7 +90,7 @@ export default {
       let cards = singleCards.concat(singleCards);
       return _.shuffle(cards);
     },
-    updateSettings: function(settings){
+    updateSettings: function(settings) {
       this.settings = settings;
     },
     storeCard: function(card) {
@@ -87,25 +100,25 @@ export default {
       this.activePlayerIndex++;
     },
     checkForMatch: function() {
-      if (this.flippedCards.length < 2) {
-        return;
+      if (this.flippedCards.length === 2) {
+          setTimeout(this.performCheckForMatch, 1200);
       }
-      let that = this;
-      setTimeout(function() {
-        if (that.isMatch) {
-          console.log("Match!");
-          that.flippedCards.forEach(c => c.removeFromPlay());
-          that.$refs.playerContainer.incrementScoreOfActivePlayer();
-          that.checkForFinish();
-        } else {
-          console.log("No match...");
-          while (that.flippedCards.length > 0) {
-            that.flippedCards[0].flip();
-          }
-          that.nextPlayer();
-        }
-        that.$refs.playerContainer.incrementAttemptsOfActivePlayer();
-      }, 1000);
+    },
+    performCheckForMatch: function() {
+      this.isMatch ? this.onMatch() : this.onNoMatch();
+      this.$refs.playerContainer.incrementAttemptsOfActivePlayer();
+    },
+    onMatch: function() {
+      this.flippedCards.forEach(c => c.removeFromPlay());
+      this.$refs.playerContainer.incrementScoreOfActivePlayer();
+      this.checkForFinish();
+    },
+    onNoMatch: function() {
+      console.log("there are " + this.flippedCards.length + " flipped card(s)")
+      while (this.flippedCards.length > 0) {
+        this.flippedCards[0].flip();
+      }
+      this.nextPlayer();
     },
     start: function(startSettings) {
       if (this.startSettings === null && startSettings != undefined) {
