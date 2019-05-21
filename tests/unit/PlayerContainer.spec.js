@@ -26,6 +26,10 @@ describe("Player container", () => {
     expect(activePlayer.name).toBe("Bob");
     expect(activePlayer.isAtTurn).toBe(true);
   });
+  it("there should be no winners", () => {
+    expect(wrapper.vm.winners).toBeFalsy();
+    expect(wrapper.vm.winnersAsString).toBeFalsy();
+  });
   describe("when incrementing the score of the active player", () => {
     wrapper.vm.incrementScoreOfActivePlayer();
     it("the active player should now have some points", () => {
